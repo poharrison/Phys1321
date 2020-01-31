@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 def getQ(x_arr, q_arr):
     # create vectors for charge locations
@@ -29,24 +30,30 @@ def getPhi(Q):
     # Get all unique vectors to all (x,y) points
     for i in x:
         for j in y[y_start:]:
-            s.append([i, j])
+            s.append([i, j, 0])
             if (i != j):
-                s.append([j, i])
+                s.append([j, i, 0])
         y_start+=1
     r = np.array(s)
-
+    z = np.meshgrid(x, y)
+    print(z)
     print(r)
+    print(len(r))
     print(r.T)
+    #print(r)
+    #print(r.T)
     # still not right format here
     # maybe take this line below and put into a vectorized function
     phi = calc_phi(r)
     plt.contour(phi)
     #return phi
-@np.vectorize
+#@np.vectorize
 def calc_phi(r):
-    print(Q)
-    #phi = (np.matmul(np.matmul(r.T,Q),r))/(2*np.linalg.norm(r)**5)
-    #return phi
+    phi = np.empty(shape = len(r))
+    for i in range(len(r)):
+        phi[i] = (np.matmul(np.matmul(r[i].T,Q),r[i]))/(2*np.linalg.norm(r[i])**5)
+    print(phi)
+    return phi
 
 # define l
 l = 1
